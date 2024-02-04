@@ -83,9 +83,60 @@ $result = mysqli_query($conn, $sql);
             background-color: #ffc107;
             color: #000;
         }
+        nav {
+            padding: 2rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav__logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .nav__links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        :root {
+            --primary-color: #28bf96;
+            --primary-color-dark: #209677;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --white: #ffffff;
+        }
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+        .link a:hover {
+            color: var(--primary-color);
+        }
+
     </style>
 </head>
 <body>
+<nav>
+        <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
+        <ul class="nav__links">
+            <li class="link"><a href="profile.php">Profile</a></li>
+            <li class="link"><a href="appointment.php">Your Appointments</a></li>
+            <li class="link"><a href="prescription.php">Prescription</a></li>
+            <li class="link"><a href="messages.php">Messages</a></li>
+            <li class="link"><a href="cme.php">CME</a></li>
+            <li class="link"><a href="billing.php">Billing and Invoice</a></li>
+            <li class="link"><a href="reviews.php">Your Reviews</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <h2>Welcome,
             <?php echo $user_name ?>
