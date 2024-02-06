@@ -75,6 +75,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } catch (Exception $e) {
             echo "Email sending failed: {$mail->ErrorInfo}";
         }
-        unlink($file_path);
     }
 }

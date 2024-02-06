@@ -209,21 +209,51 @@ nav {
         grid-area: 1/1/2/2;
     }
 }
+.background-image{
+    background: url(Images/background.jpg);
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 6%;
+    position: relative;
+}
+#a {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#a:hover {
+    background-color: var(--primary-color-dark);
+}
+
+
+
     </style>
 </head>
 
 <body>
-    <div class="container">
         <nav>
             <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
             <ul class="nav__links">
                 <li class="link"><a href="patprofile.php">Profile</a></li>
                 <li class="link"><a href="patappointment.php">Request an Appointment</a></li>
-                <li class="link"><a href="#">Messages</a></li>
+                <li class="link"><a href="patmessages.php">Messages</a></li>
                 <li class="link"><a href="makepayment.php">Billing and Invoice</a></li>
                 <li class="link"><a href="feedback.php">Feedback</a></li>
             </ul>
         </nav>
+    <div class="background-image">
+        <div class="background-content">
+            <h1>Provide an exceptional <br>patient exprience</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti reiciendis exercitationem expedita ut eum commodi, quis ea, nihil necessitatibus laboriosam blanditiis eligendi facere illo ducimus sunt magnam. Inventore, rem explicabo.</p>
+            <a href="#" id="a">Read More</a>
+        </div>
     </div>
 </body>
 
