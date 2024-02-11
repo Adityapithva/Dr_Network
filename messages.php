@@ -5,13 +5,19 @@ if (mysqli_connect_errno()) {
     die("Connection failed: " . mysqli_connect_error());
 }
 $sql1 = "select user_id,username,user_type from users";
-$result1 = mysqli_query($conn,$sql1); 
+$result1 = mysqli_query($conn, $sql1);
 $name = $_SESSION['name'];
-print_r($_SESSION);
-$sender_id = $_SESSION['user_id']; 
+$sender_id = $_SESSION['user_id'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $message = $_POST['content'];
+    $reciver_id = $_POST['receiver_id'];
+    $sql2 = "insert into messages (sender_id,receiver_id,message_content,time) values ('$sender_id','$reciver_id','$message',NOW())";
+    $result2 = mysqli_query($conn, $sql2);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +26,7 @@ $sender_id = $_SESSION['user_id'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
         nav {
             padding: 2rem 1rem;
             display: flex;
@@ -47,6 +54,7 @@ $sender_id = $_SESSION['user_id'];
             cursor: pointer;
             transition: 0.3s;
         }
+
         :root {
             --primary-color: #28bf96;
             --primary-color-dark: #209677;
@@ -54,72 +62,20 @@ $sender_id = $_SESSION['user_id'];
             --text-light: #6b7280;
             --white: #ffffff;
         }
+
         .link a:hover {
             color: var(--primary-color);
         }
-        .containert{
-            display: grid;
-            place-content: center;
-            min-height: 100vh;
-        }
-        .chat{
-            background-color: red;
-            padding: 2rem;
-            border-radius: 10px;
-        }
-        .msg{
-            width: 420px;
-            height: 480px;
-            border-top: 1px solid lightgrey;
-            border-bottom: 1px solid lightgrey;
-            margin: 1rem auto;
-            padding: 1rem 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .input_msg{
-            display: flex;
-            justify-content: space-between;
-        }
-        .input_msg .t{
-            width: 75%;
-        }
-        .input{
-            width: 80%;
-            font-size: 1.3rem;
-            padding: 0.4rem 1.3rem;
-        }
-        .input_msg button{
-            background-color: #171747;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem 1.2rem;
-            font-size: 1.3rem;
-            border-radius: 5px;
-        }
-        .msg p{
-            background-color: gray;
-            padding: 0.4rem 1rem;
-            width: fit-content;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-        .msg p span{
-            display: block;
-            font-weight: bold;
-            opacity: 0.5;
-        }
-        .msg .sender{
-            background-color:green;
-            align-self:end;
+        .card-body{
+            max-height: 500px;
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
-<nav>
+    <nav>
         <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
         <ul class="nav__links">
             <li class="link"><a href="profile.php">Profile</a></li>
@@ -143,28 +99,36 @@ $sender_id = $_SESSION['user_id'];
             </thead>
             <tbody>
                 <?php
-                if(mysqli_num_rows($result1)> 0){
-                    while($row = $result1->fetch_assoc()){
-                        echo"<tr>";
-                        echo"<td>".$row['user_id']."</td>";
-                        echo"<td>".$row['username']."</td>";
-                        echo"<td>".$row['user_type']."</td>";
-                        echo "<td><button class='btn btn-success' data-bs-toggle='collapse' data-bs-target='#collapseMessage".$row['user_id']."'>Send Message</button></td>";
-                        echo"</tr>";
-                        echo "<tr id='collapseMessage".$row['user_id']."' class='collapse'><td colspan='4'>
-                        <div class='containert'>
-                            <div class='chat'>
-                                <h2>Welcome ".$name."</h2>
-                                <div class='msg' id='messageBox" . $row['user_id'] . "'>
-
-                                </div>
-                                <div class='input_msg'>
-                                <input type='text' class='t form-control' placeholder='Write message here' id='messageInput" . $row['user_id'] . "'>
-                                <button class='btn btn-primary mt-2' onclick='sendMessage(" . $row['user_id'] . ")'>Send</button>
-                                </div>
-                            </div>
-                        </div>
-                    </td></tr>";
+                if (mysqli_num_rows($result1) > 0) {
+                    while ($row = $result1->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['user_id'] . "</td>";
+                        echo "<td>" . $row['username'] . "</td>";
+                        echo "<td>" . $row['user_type'] . "</td>";
+                        echo "<td><button class='btn btn-success' data-bs-toggle='collapse' data-bs-target='#collapseexample" . $row['user_id'] . "'>Message</button>";
+                        echo "<div class='collapse' id='collapseexample" . $row['user_id'] . "'>";
+                        echo "<div class='card'>";
+                        echo "<div class='card-header'>Welcome $name</div>";
+                        echo "<div class='card-body'>";
+                        $sql3 = "SELECT * FROM messages WHERE sender_id = '$sender_id' AND receiver_id = '" . $row['user_id'] . "'";
+                        $result3 = mysqli_query($conn, $sql3);
+                        if (mysqli_num_rows($result3) > 0) {
+                            while ($message_row = mysqli_fetch_assoc($result3)) {
+                                echo "<p>You:".$message_row['message_content']."</p>";
+                            }
+                        } else {
+                            echo "<p>No messages sent.</p>";
+                        }
+                        echo "</div>";
+                        echo "<div class='card-footer'>";
+                        echo "<form method='post'>";
+                        echo "<input type='hidden' name='receiver_id' value='" . $row['user_id'] . "'>";
+                        echo "<input type='text' placeholder='Type your message' name='content'>";
+                        echo "<button class='btn btn-success'>Send</button>";
+                        echo "</form>";
+                        echo "</div></div></div>";
+                        echo "</td>";
+                        echo "</tr>";
                     }
                 }
                 ?>
@@ -172,19 +136,9 @@ $sender_id = $_SESSION['user_id'];
         </table>
     </div>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function sendMessage(userId){
-            const messageInput = document.getElementById('messageInput' + userId);
-            const message = messageInput.value;
-            const messageBox = document.getElementById('messageBox' + userId);
-            const p = document.createElement('p');
-            p.innerHTML = "<span>You:</span>"+ message;
-            p.className = "sender";
-            messageBox.appendChild(p);
-            messageInput.value = '';
-        }
         const socket = new WebSocket('ws://localhost:5001');
 
         socket.onopen = (event) => {
@@ -200,4 +154,5 @@ $sender_id = $_SESSION['user_id'];
         };
     </script>
 </body>
+
 </html>
