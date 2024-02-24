@@ -8,12 +8,20 @@ $sql1 = "select user_id,username,user_type from users";
 $result1 = mysqli_query($conn, $sql1);
 $name = $_SESSION['name'];
 $sender_id = $_SESSION['user_id'];
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $message = $_POST['content'];
-    $reciver_id = $_POST['receiver_id'];
-    $sql2 = "insert into messages (sender_id,receiver_id,message_content,time) values ('$sender_id','$reciver_id','$message',NOW())";
-    $result2 = mysqli_query($conn, $sql2);
-}
+// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+//     $message = $_POST['content'];
+//     $reciver_id = $_POST['receiver_id'];
+//     $sql2 = "insert into messages (sender_id,receiver_id,message_content,time) values ('$sender_id','$reciver_id','$message',NOW())";
+//     $result2 = mysqli_query($conn, $sql2);
+// }
+// $sql_result = "select sender_id,message_content,time from messages where receiver_id = '$sender_id'";
+// $result_received = mysqli_query($conn, $sql_result);
+// $received_messages = array();
+// if(mysqli_num_rows($result_received) > 0){
+//     while($row_received = mysqli_fetch_assoc($result_received)){
+//         $received_messages[] = $row_received;
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,12 +74,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .link a:hover {
             color: var(--primary-color);
         }
-        .card-body{
-            max-height: 500px;
-        }
+        
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var conn = new WebSocket('ws://localhost:5001');
+            conn.onopen = function(e) {
+                console.log("Connection established!");
+            };
+            
+            $('#message_form').submit(function(e){
+                e.preventDefault();
+                var sender_id = $('#sender_id').val();
+                var receiver_id = $('#receiver_id').val();
+                var message = $('#message').val();
+                var data = {
+                    sender_id: sender_id,
+                    receiver_id: receiver_id,
+                    message: message
+                };
+                conn.send(JSON.stringify(data));
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -88,71 +116,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </ul>
     </nav>
     <div class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>User Id</th>
-                    <th>User Name</th>
-                    <th>User Type</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if (mysqli_num_rows($result1) > 0) {
-                    while ($row = $result1->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['user_id'] . "</td>";
-                        echo "<td>" . $row['username'] . "</td>";
-                        echo "<td>" . $row['user_type'] . "</td>";
-                        echo "<td><button class='btn btn-success' data-bs-toggle='collapse' data-bs-target='#collapseexample" . $row['user_id'] . "'>Message</button>";
-                        echo "<div class='collapse' id='collapseexample" . $row['user_id'] . "'>";
-                        echo "<div class='card'>";
-                        echo "<div class='card-header'>Welcome $name</div>";
-                        echo "<div class='card-body'>";
-                        $sql3 = "SELECT * FROM messages WHERE sender_id = '$sender_id' AND receiver_id = '" . $row['user_id'] . "'";
-                        $result3 = mysqli_query($conn, $sql3);
-                        if (mysqli_num_rows($result3) > 0) {
-                            while ($message_row = mysqli_fetch_assoc($result3)) {
-                                echo "<p>You:".$message_row['message_content']."</p>";
-                            }
-                        } else {
-                            echo "<p>No messages sent.</p>";
-                        }
-                        echo "</div>";
-                        echo "<div class='card-footer'>";
-                        echo "<form method='post'>";
-                        echo "<input type='hidden' name='receiver_id' value='" . $row['user_id'] . "'>";
-                        echo "<input type='text' placeholder='Type your message' name='content'>";
-                        echo "<button class='btn btn-success'>Send</button>";
-                        echo "</form>";
-                        echo "</div></div></div>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                }
-                ?>
-            </tbody>
-        </table>
+        <h1>Sender Page</h1>
+        <form id="message_form">
+        <input type="hidden" id="sender_id" value="1">
+        <input type="text" id="receiver_id" placeholder="Receiver ID" required>
+        <input type="text" id="message" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+    </form>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const socket = new WebSocket('ws://localhost:5001');
-
-        socket.onopen = (event) => {
-            console.log('Connected to WebSocket server');
-            socket.send('Hello, WebSocket server!');
-        };
-
-        socket.onmessage = (event) => {
-            console.log("Received message: $event.data");
-        }
-        socket.onclose = (event) => {
-            console.log('WebSocket connection closed');
-        };
-    </script>
 </body>
 
 </html>
