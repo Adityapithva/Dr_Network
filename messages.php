@@ -4,24 +4,10 @@ $conn = mysqli_connect("localhost", "root", 12345, "healthcare");
 if (mysqli_connect_errno()) {
     die("Connection failed: " . mysqli_connect_error());
 }
-$sql1 = "select user_id,username,user_type from users";
-$result1 = mysqli_query($conn, $sql1);
 $name = $_SESSION['name'];
 $sender_id = $_SESSION['user_id'];
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     $message = $_POST['content'];
-//     $reciver_id = $_POST['receiver_id'];
-//     $sql2 = "insert into messages (sender_id,receiver_id,message_content,time) values ('$sender_id','$reciver_id','$message',NOW())";
-//     $result2 = mysqli_query($conn, $sql2);
-// }
-// $sql_result = "select sender_id,message_content,time from messages where receiver_id = '$sender_id'";
-// $result_received = mysqli_query($conn, $sql_result);
-// $received_messages = array();
-// if(mysqli_num_rows($result_received) > 0){
-//     while($row_received = mysqli_fetch_assoc($result_received)){
-//         $received_messages[] = $row_received;
-//     }
-// }
+$sql1 = "select user_id,username,user_type from users";
+$result1 = mysqli_query($conn, $sql1);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +16,8 @@ $sender_id = $_SESSION['user_id'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
@@ -76,9 +62,6 @@ $sender_id = $_SESSION['user_id'];
         }
         
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
             var conn = new WebSocket('ws://localhost:5001');
@@ -116,6 +99,53 @@ $sender_id = $_SESSION['user_id'];
         </ul>
     </nav>
     <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>User Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if(mysqli_num_rows($result1) > 0){
+                    while($row = $result1->fetch_assoc()){
+                        echo "<tr>";
+                        echo "<td>".$row['user_id']."</td>";
+                        echo "<td>".$row['username']."</td>";
+                        echo "<td>".$row['user_type']."</td>";
+                        echo "<td><button class='btn btn-success' data-bs-toggle='collapse' data-bs-target='#collapseexample" . $row['user_id'] . "'>Message</button>";
+                        echo "<div class='collapse' id='collapseexample" . $row['user_id'] . "'>";
+                        echo "<div class='card'>";
+                        echo "<div class='card-header'>Welcome $name</div>";
+                        echo "<div class='card-body'>";
+                        $sql3 = "SELECT * FROM messages WHERE sender_id = '$sender_id' AND receiver_id = '" . $row['user_id'] . "'";
+                        $result3 = mysqli_query($conn, $sql3);
+                        if (mysqli_num_rows($result3) > 0) {
+                            while ($message_row = mysqli_fetch_assoc($result3)) {
+                                echo "<p>You:".$message_row['message_content']."</p>";
+                            }
+                        } else {
+                            echo "<p>No messages sent.</p>";
+                        }
+                        echo "</div>";
+                        echo "<div class='card-footer'>";
+                        echo "<form method='post'>";
+                        echo "<input type='hidden' name='receiver_id' value='" . $row['user_id'] . "'>";
+                        echo "<input type='text' placeholder='Type your message' name='content'>";
+                        echo "<button class='btn btn-success'>Send</button>";
+                        echo "</form>";
+                        echo "</div></div></div>";
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
+        <div class="container">
         <h1>Sender Page</h1>
         <form id="message_form">
         <input type="hidden" id="sender_id" value="1">
@@ -123,6 +153,7 @@ $sender_id = $_SESSION['user_id'];
         <input type="text" id="message" placeholder="Type your message..." required>
         <button type="submit">Send</button>
     </form>
+    </div> 
     </div>
 </body>
 
