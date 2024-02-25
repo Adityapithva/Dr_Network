@@ -15,7 +15,7 @@ $result1 = mysqli_query($conn, $sql1);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages</title>
+    <title>D-Messages</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -81,9 +81,9 @@ $result1 = mysqli_query($conn, $sql1);
             };
             $('.message_form').submit(function(e){
                 e.preventDefault();
-                var sender_id = $(this).find('.sender_id').val();
-                var receiver_id = $(this).find('.receiver_id').val();
-                var message = $(this).find('.message').val();
+                var sender_id = $(this).find('#sender_id').val();
+                var receiver_id = $(this).find('#receiver_id').val();
+                var message = $(this).find('#message').val();
                 var data = {
                     sender_id: sender_id,
                     receiver_id: receiver_id,
@@ -134,9 +134,9 @@ $result1 = mysqli_query($conn, $sql1);
                         echo "</div>";
                         echo "<div class='card-footer'>";
                         echo"<form class='message_form' method='post'>
-                        <input type='hidden' id='sender_id' value='$sender_id'>
-                        <input type='hidden' id='receiver_id' value='".$row['user_id']."'>
-                        <input type='text' id='message'  placeholder='Type your message...'>
+                        <input type='hidden' name='sender_id' id='sender_id' value='$sender_id'>
+                        <input type='hidden' id='receiver_id' name='receiver_id'  value='".$row['user_id']."'>
+                        <input type='text' name='message' id='message'  placeholder='Type your message...'>
                         <button type='submit' class='btn btn-success'>Send</button>
                         </form>
                         ";
@@ -148,10 +148,7 @@ $result1 = mysqli_query($conn, $sql1);
                 ?>
             </tbody>
         </table>
-        <div class="container">
-        <h1>Sender Page</h1>
     </div> 
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </body>
