@@ -5,23 +5,9 @@ $conn = mysqli_connect("localhost", "root", 12345, "healthcare");
 if (mysqli_connect_errno()) {
     die("Connection failed: " . mysqli_connect_error());
 }
-// $sql1 = "select user_id,username,user_type from users where user_id != '$sender_id'";
-// $result1 = mysqli_query($conn, $sql1);
-// $name = $_SESSION['name'];
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     $message = $_POST['content'];
-//     $receiver_id = $_POST['receiver_id'];
-//     $sql2 = "insert into messages (sender_id,receiver_id,message_content,time) values ('$sender_id','$receiver_id','$message',NOW())";
-//     $result2 = mysqli_query($conn, $sql2);
-// }
-// $sql_result = "select sender_id,message_content,time from messages where receiver_id = '$receiver_id' and sender_id = '$sender_id'";
-// $result_received = mysqli_query($conn, $sql_result);
-// $received_messages = array();
-// if(mysqli_num_rows($result_received) > 0){
-//     while($row_received = mysqli_fetch_assoc($result_received)){
-//         $received_messages[] = $row_received;
-//     }
-// }
+$sql1 = "select user_id,username,user_type from users";
+$result1 = mysqli_query($conn, $sql1);
+$name = $_SESSION['name'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +16,8 @@ if (mysqli_connect_errno()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -88,7 +74,15 @@ if (mysqli_connect_errno()) {
         .link a:hover {
             color: var(--primary-color);
         }
-        
+        .card{
+            max-width: 400px;
+            height: 500px !important;
+            margin: 5px;
+            padding: 5px;
+        }
+        .card-body{
+            overflow-y: scroll;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -106,9 +100,51 @@ if (mysqli_connect_errno()) {
             </ul>
         </nav>
         <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>User Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if(mysqli_num_rows($result1) > 0){
+                    while($row = $result1->fetch_assoc()){
+                        echo "<tr>";
+                        echo "<td>".$row['user_id']."</td>";
+                        echo "<td>".$row['username']."</td>";
+                        echo "<td>".$row['user_type']."</td>";
+                        echo "<td><button class='btn btn-success' data-bs-toggle='collapse' data-bs-target='#collapseexample" . $row['user_id'] . "'>Message</button>";
+                        echo "<div class='collapse' id='collapseexample" . $row['user_id'] . "'>";
+                        echo "<div class='card'>";
+                        echo "<div class='card-header'>Welcome $name</div>";
+                        echo "<div class='card-body messages'>";
+                        echo "</div>";
+                        echo "<div class='card-footer'>";
+                        echo"<form id='message_form'>
+                        <input type='hidden' id='sender_id' value=1>
+                        <input type='hidden' id='receiver_id'>
+                        <input type='text' id='message'  placeholder='Type your message...'>
+                        <button type='button' class='btn btn-success'>Send</button>
+                        </form>
+                        ";
+                        echo "</div></div></div>";
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
+        </div>
+        <!-- <div class="container">
             <h2>Receiver Page</h2>
             <div class="messages"></div>
-        </div>
+        </div> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

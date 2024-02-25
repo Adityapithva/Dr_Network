@@ -21,6 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 break;
             case "patient":
                 $_SESSION["user_id"] = $id;
+                $_SESSION["name"] = $name;
                 header("Location: Patient_page.php");
                 break;
             default:

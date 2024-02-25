@@ -17,6 +17,8 @@ $result1 = mysqli_query($conn, $sql1);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
@@ -60,7 +62,16 @@ $result1 = mysqli_query($conn, $sql1);
         .link a:hover {
             color: var(--primary-color);
         }
-        
+        .card{
+            max-width: 400px;
+            height: 500px;
+            align-self: center;
+            margin: 5px;
+            padding: 5px;
+        }
+        .card-body{
+            overflow-y: scroll;
+        }
     </style>
     <script>
         $(document).ready(function(){
@@ -68,12 +79,11 @@ $result1 = mysqli_query($conn, $sql1);
             conn.onopen = function(e) {
                 console.log("Connection established!");
             };
-            
-            $('#message_form').submit(function(e){
+            $('.message_form').submit(function(e){
                 e.preventDefault();
-                var sender_id = $('#sender_id').val();
-                var receiver_id = $('#receiver_id').val();
-                var message = $('#message').val();
+                var sender_id = $(this).find('.sender_id').val();
+                var receiver_id = $(this).find('.receiver_id').val();
+                var message = $(this).find('.message').val();
                 var data = {
                     sender_id: sender_id,
                     receiver_id: receiver_id,
@@ -121,22 +131,15 @@ $result1 = mysqli_query($conn, $sql1);
                         echo "<div class='card'>";
                         echo "<div class='card-header'>Welcome $name</div>";
                         echo "<div class='card-body'>";
-                        $sql3 = "SELECT * FROM messages WHERE sender_id = '$sender_id' AND receiver_id = '" . $row['user_id'] . "'";
-                        $result3 = mysqli_query($conn, $sql3);
-                        if (mysqli_num_rows($result3) > 0) {
-                            while ($message_row = mysqli_fetch_assoc($result3)) {
-                                echo "<p>You:".$message_row['message_content']."</p>";
-                            }
-                        } else {
-                            echo "<p>No messages sent.</p>";
-                        }
                         echo "</div>";
                         echo "<div class='card-footer'>";
-                        echo "<form method='post'>";
-                        echo "<input type='hidden' name='receiver_id' value='" . $row['user_id'] . "'>";
-                        echo "<input type='text' placeholder='Type your message' name='content'>";
-                        echo "<button class='btn btn-success'>Send</button>";
-                        echo "</form>";
+                        echo"<form class='message_form' method='post'>
+                        <input type='hidden' id='sender_id' value='$sender_id'>
+                        <input type='hidden' id='receiver_id' value='".$row['user_id']."'>
+                        <input type='text' id='message'  placeholder='Type your message...'>
+                        <button type='submit' class='btn btn-success'>Send</button>
+                        </form>
+                        ";
                         echo "</div></div></div>";
                         echo "</td>";
                         echo "</tr>";
@@ -147,14 +150,10 @@ $result1 = mysqli_query($conn, $sql1);
         </table>
         <div class="container">
         <h1>Sender Page</h1>
-        <form id="message_form">
-        <input type="hidden" id="sender_id" value="1">
-        <input type="text" id="receiver_id" placeholder="Receiver ID" required>
-        <input type="text" id="message" placeholder="Type your message..." required>
-        <button type="submit">Send</button>
-    </form>
     </div> 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </body>
 
 </html>
