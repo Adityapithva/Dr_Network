@@ -1,4 +1,6 @@
 <?php
+session_start();
+$id = $_SESSION['user_id'];
 require "./vendor/autoload.php";
 use Ratchet\ConnectionInterface;
 use Ratchet\Server\IoServer;
@@ -8,17 +10,19 @@ use Ratchet\MessageComponentInterface;
 class WebSocketServer implements MessageComponentInterface
 {
     protected $clients;
+    protected $id;
   
-    public function __construct()
+    public function __construct($id)
     {
         $this->clients = new \SplObjectStorage();
+        $this->id = $id;
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
         $this->clients->attach($conn);
         var_dump($conn);
-        echo "New connection! ({$conn->resourceId})\n";
+        echo "New connection! ({$conn->id})\n";
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
@@ -29,11 +33,11 @@ class WebSocketServer implements MessageComponentInterface
             }
         }
     }
-
+    
     public function onClose(ConnectionInterface $conn)
     {
         $this->clients->detach($conn);
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        echo "Connection {$conn->id} has disconnected\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
@@ -47,7 +51,7 @@ class WebSocketServer implements MessageComponentInterface
 $server = IoServer::factory(
     new HttpServer(
         new WsServer(
-            new WebSocketServer()
+            new WebSocketServer($id)
         )
     ),
     5001
