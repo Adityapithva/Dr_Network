@@ -100,9 +100,50 @@ $result = mysqli_query($conn, $sql);
                 transform: translateY(0);
             }
         }
+        nav {
+            padding: 2rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav__logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .nav__links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .link a:hover {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
+<nav>
+        <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
+        <ul class="nav__links">
+            <li class="link"><a href="patprofile.php">Profile</a></li>
+            <li class="link"><a href="patappointment.php">Request an Appointment</a></li>
+            <li class="link"><a href="patmessages.php">Messages</a></li>
+            <li class="link"><a href="makepayment.php">Billing and Invoice</a></li>
+            <li class="link"><a href="feedback.php">Feedback</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <h2>List of available Doctors</h2>
         <table class="table table-striped">

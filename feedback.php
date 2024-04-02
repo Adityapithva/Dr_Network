@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +10,6 @@
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
-            display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
@@ -62,9 +61,54 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
+        nav {
+            padding: 2rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav__logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .nav__links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .link a:hover {
+            color: var(--primary-color);
+        }
     </style>
 </head>
+
 <body>
+    <div class="container">
+        <nav>
+            <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
+            <ul class="nav__links">
+                <li class="link"><a href="patprofile.php">Profile</a></li>
+                <li class="link"><a href="patappointment.php">Request an Appointment</a></li>
+                <li class="link"><a href="patmessages.php">Messages</a></li>
+                <li class="link"><a href="makepayment.php">Billing and Invoice</a></li>
+                <li class="link"><a href="feedback.php">Feedback</a></li>
+            </ul>
+        </nav>
+    </div>
     <form action="submit_feedback.php" method="post">
         <label for="doctor_id">Doctor ID:</label>
         <input type="text" name="doctor_id" required><br>
@@ -84,4 +128,5 @@
         <input type="submit" value="Submit Feedback">
     </form>
 </body>
+
 </html>
