@@ -232,7 +232,7 @@ print_r($_SESSION);
         </nav>
         <header class="header">
             <div class="content">
-                <h1><span>Get Quick</span><br />Medical Services</h1>
+                <h1><span>Get Quick</span><br/>Medical Services</h1>
                 <p>
                     In today's fast-paced world, access to prompt and efficient medical
                     services is of paramount importance. When faced with a medical
@@ -268,5 +268,4 @@ print_r($_SESSION);
         </header>
     </div>
 </body>
-
 </html>

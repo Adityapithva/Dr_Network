@@ -72,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Body    = "Hello, $name .Please find attached prescription details.";
             $mail->send();
             echo 'Email sent successfully';
+            unlink($file);
         } catch (Exception $e) {
             echo "Email sending failed: {$mail->ErrorInfo}";
         }

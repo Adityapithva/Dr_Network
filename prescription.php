@@ -145,7 +145,7 @@ session_start();
 
 <body>
 <nav>
-        <div class="nav__logo"><img src="Images/logo.png" alt=""></div>
+        <div class="nav__logo"><img src="Images/logo.png" alt=""><a href="Doctor_page.php"></a></div>
         <ul class="nav__links">
             <li class="link"><a href="profile.php">Profile</a></li>
             <li class="link"><a href="appointment.php">Your Appointments</a></li>
