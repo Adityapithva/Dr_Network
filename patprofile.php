@@ -29,7 +29,14 @@ if (mysqli_num_rows($result) > 0) {
     <link rel="stylesheet" href="profile.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
-
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+        :root {
+            --primary-color: #28bf96;
+            --primary-color-dark: #209677;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --white: #ffffff;
+        }
         :root {
             --blue: #3498db;
             --dark-blue: #2980b9;
@@ -285,19 +292,7 @@ if (mysqli_num_rows($result) > 0) {
         .link a:hover {
             color: var(--primary-color);
         }
-        #a {
-    display: inline-block;
-    padding: 1rem 3rem;
-    background-color: var(--primary-color);
-    color: var(--white);
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
 
-#a:hover {
-    background-color: var(--primary-color-dark);
-}
 
         @media (max-width:650px) {
             .update-profile form .flex {

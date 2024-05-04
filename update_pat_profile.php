@@ -144,6 +144,14 @@ if(isset($_POST['update_pat_profile'])){
             <img src="Images/4333097.jpeg" alt="">
             <div class="flex">
                 <div class="inputBox">
+                    <span>Patient Id:</span>
+                    <input type="text" name="update_id" value="<?php echo $row['patient_id']?>" class="box">
+                </div>
+                <div class="inputBox">
+                    <span>User Id:</span>
+                    <input type="text" name="update_id" value="<?php echo $row['user_id']?>" class="box">
+                </div>
+                <div class="inputBox">
                     <span>User Name:</span>
                     <input type="text" name="update_name" value="<?php echo $row['name']?>" class="box">
                 </div>

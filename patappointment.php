@@ -17,6 +17,14 @@ $result = mysqli_query($conn, $sql);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+        :root {
+            --primary-color: #28bf96;
+            --primary-color-dark: #209677;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --white: #ffffff;
+        }
         body {
             background-color: #f8f9fa;
         }
@@ -149,8 +157,8 @@ $result = mysqli_query($conn, $sql);
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Doctor_id</th>
-                    <th>User_id</th>
+                    <th>Doctor Id</th>
+                    <th>User Id</th>
                     <th>Name</th>
                     <th>Phone Number</th>
                     <th>Email</th>
